@@ -20,7 +20,18 @@ public class ShoppingList {
             //adds all ingreidents to the shopping list
             for(IngredientNeeded ingredientNeeded : recipe.getIngredientsList()) {
                 if(!this.shopList.contains(ingredientNeeded)){
-                this.shopList.add(ingredientNeeded);
+                    //Needs to be double checked by for loop because of the way IngredientNeeded is built
+                    boolean found = false;
+                    for(IngredientNeeded ingredient : this.shopList){
+                        if(ingredientNeeded.getIngredient().equals(ingredient.getIngredient())){
+                            ingredient.setAmount(ingredient.getAmount() + ingredientNeeded.getAmount());
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found){
+                    this.shopList.add(ingredientNeeded);
+                    }
                 } else{
                     for(IngredientNeeded ingredient : this.shopList){
                         if(ingredientNeeded.getIngredient().equals(ingredient.getIngredient())){
@@ -34,13 +45,23 @@ public class ShoppingList {
     public void addingredient(IngredientNeeded ingredientNeeded) {
         //adds an ingredient to the list
         if(!this.shopList.contains(ingredientNeeded)){
-        this.shopList.add(ingredientNeeded);
+            //Needs to be double checked by for loop because of the way IngredientNeeded is built
+            boolean found = false;
+            for(IngredientNeeded ingredient : this.shopList){
+                if(ingredientNeeded.getIngredient().equals(ingredient.getIngredient())){
+                    ingredient.setAmount(ingredient.getAmount() + ingredientNeeded.getAmount());
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+            this.shopList.add(ingredientNeeded);
+            }
         } 
         else{
             for(IngredientNeeded ingredient : this.shopList){
                 if(ingredientNeeded.getIngredient().equals(ingredient.getIngredient())){
                     ingredient.setAmount(ingredient.getAmount() + ingredientNeeded.getAmount());
-                    System.out.println("HI");
                 }
             }
         }
@@ -49,7 +70,22 @@ public class ShoppingList {
     public void removeIngredient(IngredientNeeded ingredientNeeded) {
         //removes an ingredient from the list
         if(!this.shopList.contains(ingredientNeeded)){
+            //Needs to be double checked by for loop because of the way IngredientNeeded is built
+            boolean found = false;
+            for(IngredientNeeded ingredient : this.shopList){
+                if(ingredientNeeded.getIngredient().equals(ingredient.getIngredient())){
+                    if(ingredient.getAmount() < ingredientNeeded.getAmount()){
+                        shopList.remove(ingredient);
+                    } else{
+                    ingredient.setAmount(ingredient.getAmount() - ingredientNeeded.getAmount());
+                    }
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
             System.out.println("Ingredient not found");
+            }
         } else{
             for(IngredientNeeded ingredient : this.shopList){
                 if(ingredientNeeded.getIngredient().equals(ingredient.getIngredient())){
