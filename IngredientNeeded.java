@@ -8,6 +8,25 @@ public class IngredientNeeded {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return ingredient.getName() + " " + amount;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        } else{
+            if (!(other instanceof IngredientNeeded)) {
+                return false;
+            } else{
+                IngredientNeeded otherIngredientNeeded = (IngredientNeeded) other;
+                return this.amount == otherIngredientNeeded.amount && this.ingredient.equals(otherIngredientNeeded.ingredient);
+            }
+        }
+    }
+
     //Getters
     public Ingredient getIngredient() {
         return ingredient;
