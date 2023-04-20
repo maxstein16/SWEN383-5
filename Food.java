@@ -1,13 +1,13 @@
 public class Food {
-    private String name;
     private double calories; // in calories
     private double fat; // in grams
     private double protein; // in grams
     private double fiber; // in grams
     private double carbs; // in grams
 
-    public Food(String name, double calories, double fat, double protein, double fiber, double carbs) {
-        this.name = name;
+    // Constructor for food, implemented in Ingredient, Recipe, and Meal
+    // Name is implemented by class because of autocalculation/overloading reasons
+    public Food(double calories, double fat, double protein, double fiber, double carbs) {
         this.calories = calories;
         this.fat = fat;
         this.protein = protein;
@@ -15,9 +15,7 @@ public class Food {
         this.carbs = carbs;
     }
 
-    public String getName() {
-        return name;
-    }
+    //Getters
 
     public double getCalories() {
         return calories;
@@ -39,9 +37,24 @@ public class Food {
         return carbs;
     }
 
-    @Override
-    public String toString() {
-        return name;
+    public void setCalories(double calories) {
+        this.calories = calories;
+    }
+
+    public void setFat(double fat) {
+        this.fat = fat;
+    }
+
+    public void setProtein(double protein) {
+        this.protein = protein;
+    }
+
+    public void setFiber(double fiber) {
+        this.fiber = fiber;
+    }
+
+    public void setCarbs(double carbs) {
+        this.carbs = carbs;
     }
 
 
