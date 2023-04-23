@@ -1,3 +1,5 @@
+package Goal;
+
 public enum Goal {
     MAINTAIN_WEIGHT("Maintain Weight"),
     LOSE_WEIGHT("Lose Weight"),
