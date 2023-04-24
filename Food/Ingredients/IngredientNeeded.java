@@ -1,3 +1,4 @@
+package Food.Ingredients;
 
 public class IngredientNeeded {
     

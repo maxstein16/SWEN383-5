@@ -1,3 +1,11 @@
+package Util;
+
+import Food.Ingredients.Ingredient;
+import Food.Ingredients.IngredientNeeded;
+import Food.Ingredients.Ingredients;
+import Food.Recipes.Recipe;
+import Users.User;
+import Users.Users;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -14,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+
 
 public class JSONUtils {
     public JSONUtils() {
@@ -73,9 +82,9 @@ public class JSONUtils {
                 .setDateFormat("yyyy-mm-dd")
                 .create();
         ArrayList<User> usersList = new ArrayList<>();
-        File checkFile = new File("Users.json");
+        File checkFile = new File("Data/Users.json");
         if (checkFile.exists() && checkFile.length() != 0) {
-            JsonReader jsonReader = new JsonReader(new FileReader("Users.json"));
+            JsonReader jsonReader = new JsonReader(new FileReader("Data/Users.json"));
             Users usersGson = gson.fromJson(jsonReader, Users.class);
             List<User> users = usersGson.getUsers();
             usersList.addAll(users);
@@ -96,9 +105,9 @@ public class JSONUtils {
     public void addUser(User user) throws IOException {
         ArrayList<User> currentUsers = getAllUsers();
         if (currentUsers.contains(user)) {
-            System.out.println("User already exists.");
+            System.out.println("Users.Users.User already exists.");
         } else {
-            JsonWriter writer = new JsonWriter(new FileWriter("Users.json"));
+            JsonWriter writer = new JsonWriter(new FileWriter("Data/Users.json"));
             writeHeader("users", writer);
             for (User userInArr : currentUsers) {
                 writeUser(userInArr, writer);
@@ -133,7 +142,7 @@ public class JSONUtils {
     public void removeUser(User user) throws IOException {
         ArrayList<User> allUsers = getAllUsers();
         allUsers.remove(user);
-        JsonWriter writer = new JsonWriter(new FileWriter("Users.json"));
+        JsonWriter writer = new JsonWriter(new FileWriter("Data/Users.json"));
         writeHeader("users", writer);
         for (User userInArr : allUsers) {
             writeUser(userInArr, writer);
@@ -142,7 +151,7 @@ public class JSONUtils {
     }
 
     public void createIngredientsJSON() throws IOException {
-        File input = new File("ingredients.csv");
+        File input = new File("Data/ingredients.csv");
         File output = new File("Data/Ingredients.json");
         CsvSchema csvSchema = CsvSchema.builder().setUseHeader(true).build();
         CsvMapper csvMapper = new CsvMapper();
