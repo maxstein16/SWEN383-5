@@ -19,8 +19,9 @@ public class JSONUtils {
     public JSONUtils() {
 
     }
+
     public void test() throws IOException, ParseException {
-        LocalDate date = LocalDate.of(1998,7,10);
+        LocalDate date = LocalDate.of(1998, 7, 10);
         User testUser = new User("TestA", "Josh S", 100, 200, date);
         addUser(testUser);
         User testUser2 = new User("TestB", "Max S", 150, 300, date);
@@ -30,16 +31,28 @@ public class JSONUtils {
         createIngredientsJSON();
     }
 
+    private void closeWriter(JsonWriter writer) throws IOException {
+        writer.endArray();
+        writer.endObject();
+        writer.flush();
+        writer.close();
+    }
+
+    private void writeHeader(String header, JsonWriter writer) throws IOException {
+        writer.beginObject();
+        writer.name(header);
+        writer.beginArray();
+    }
+
     public ArrayList<User> getAllUsers() throws IOException {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-mm-dd")
                 .create();
         ArrayList<User> usersList = new ArrayList<>();
         File checkFile = new File("./Users.json");
-        if(checkFile.exists()) {
-            FileReader file = new FileReader("./Users.json");
+        if (checkFile.exists()) {
             File fileCheck = new File("./Users.json");
-            JsonReader jsonReader = new JsonReader(file);
+            JsonReader jsonReader = new JsonReader(new FileReader("./Users.json"););
             if (fileCheck.length() != 0) {
                 Users usersGson = gson.fromJson(jsonReader, Users.class);
                 List<User> users = usersGson.getUsers();
@@ -51,8 +64,8 @@ public class JSONUtils {
 
     public User getSingleUser(String userName) throws IOException {
         ArrayList<User> allUsers = getAllUsers();
-        for(User user : allUsers) {
-            if(Objects.equals(user.getUsername(), userName)) {
+        for (User user : allUsers) {
+            if (Objects.equals(user.getUsername(), userName)) {
                 return user;
             }
         }
@@ -64,19 +77,13 @@ public class JSONUtils {
         if (currentUsers.contains(user)) {
             System.out.println("User already exists.");
         } else {
-            FileWriter file = new FileWriter("./Users.json");
-            JsonWriter writer = new JsonWriter(file);
-            writer.beginObject();
-            writer.name("users");
-            writer.beginArray();
+            JsonWriter writer = new JsonWriter(new FileWriter("./Users.json"));
+            writeHeader("users", writer);
             for (User userInArr : currentUsers) {
                 writeUser(userInArr, writer);
             }
             writeUser(user, writer);
-            writer.endArray();
-            writer.endObject();
-            writer.flush();
-            writer.close();
+            closeWriter(writer);
         }
     }
 
@@ -93,18 +100,12 @@ public class JSONUtils {
     public void removeUser(User user) throws IOException {
         ArrayList<User> allUsers = getAllUsers();
         allUsers.remove(user);
-        FileWriter file = new FileWriter("./Users.json");
-        JsonWriter writer = new JsonWriter(file);
-        writer.beginObject();
-        writer.name("users");
-        writer.beginArray();
+        JsonWriter writer = new JsonWriter(new FileWriter("./Users.json"));
+        writeHeader("users", writer);
         for (User userInArr : allUsers) {
             writeUser(userInArr, writer);
         }
-        writer.endArray();
-        writer.endObject();
-        writer.flush();
-        writer.close();
+        closeWriter(writer);
     }
 
     public void createIngredientsJSON() throws IOException {
@@ -118,7 +119,7 @@ public class JSONUtils {
         mapper.writerWithDefaultPrettyPrinter().writeValue(output,
                 csvMapper.readerFor(Map.class).with(csvSchema).readValues(new InputStreamReader(new FileInputStream(input), "windows-1252")).readAll());
     }
-/*
+
     public ArrayList<Recipe> getAllRecipes() {
 
     }
@@ -127,8 +128,32 @@ public class JSONUtils {
 
     }
 
-    public void removeRecipe(String recipeName) {
+    public void removeRecipe(Recipe recipe) throws IOException {
+        ArrayList<Recipe> allRecipes = getAllRecipes();
+        allRecipes.remove(recipe);
+        JsonWriter writer = new JsonWriter(new FileWriter("./Users.json"));
+        writeHeader("recipes", writer);
+        for (Recipe recipeInArr : allRecipes) {
+            writeRecipe();
+        }
+        closeWriter(writer);
+    }
 
+    public void addRecipe(Recipe recipe) {
+
+    }
+
+    private void writeRecipe(JsonWriter writer, Recipe recipe) {
+        writer.beginObject();
+        writer.name("name").value(recipe.getName());
+        writer.name("ingredients").value(recipe.getIngredientsList);
+        writer.name("stepsList").value(user.getHeight());
+        writer.name("calories").value(user.getWeight());
+        writer.name("far").value(user.getBirthDate());
+        writer.name("protein").value(user.getWeight());
+        writer.name("fiber").value(user.getBirthDate());
+        writer.name("carbs").value(user.getWeight());
+        writer.endObject();
     }
 
     public Meal[] getAllMeals() {
