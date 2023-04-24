@@ -1,5 +1,8 @@
+import com.google.gson.annotations.SerializedName;
+
 public class Ingredient extends Food {
     private double stock;
+    @SerializedName("Shrt_Desc")
     private String name;
     
     // Constructor for ingredients
