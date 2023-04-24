@@ -1,7 +1,12 @@
+package Food.Recipes;
+
+import Food.Food;
+import Food.Ingredients.Ingredient;
+import Food.Ingredients.IngredientNeeded;
 
 import java.util.ArrayList;
 
-public class Recipe extends Food{
+public class Recipe extends Food {
     ArrayList<IngredientNeeded> ingredientsList;
     private ArrayList<String> stepsList;
     private String name;
@@ -51,7 +56,7 @@ public class Recipe extends Food{
         return "Recipe: " + this.name + " has " + getIngredients().size() + " ingredients and " + getStepsList().size() + " steps, totaling " + getCalories() + " calories " + getFat() + " fat " + getProtein() + " protein " + getFiber() + " fiber " + getCarbs() + " carbs ";
     }
     
-    //Ingredients List
+    //Food.Ingredients.Ingredients List
     public ArrayList<IngredientNeeded> getIngredients() {
         return this.ingredientsList;
     }

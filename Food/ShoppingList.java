@@ -1,3 +1,8 @@
+package Food;
+
+import Food.Ingredients.IngredientNeeded;
+import Food.Recipes.Recipe;
+
 import java.util.ArrayList;
 
 public class ShoppingList {
@@ -102,7 +107,7 @@ public class ShoppingList {
 
     @Override
     public String toString() {
-        return "ShoppingList: " + shopList.toString();
+        return "Food.ShoppingList: " + shopList.toString();
     }
 
 

@@ -1,3 +1,10 @@
+package Food;
+
+import Food.Ingredients.Ingredient;
+import Food.Ingredients.IngredientNeeded;
+import Food.Meals.Meal;
+import Food.Recipes.Recipe;
+
 import java.util.ArrayList;
 
 public class FoodTest {
