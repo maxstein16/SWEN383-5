@@ -1,14 +1,19 @@
 package Workout;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class MediumIntensity implements Workout {
 
     @Override
-    public int CalcCals(int duration) {
+    public String CalcCals(int duration) {
         int calsburned=7;
         int totalcalsburned=calsburned*duration;
+        Calendar now = Calendar.getInstance();
+        DateFormat df = new SimpleDateFormat("ddMMyyyyHHmm");
+        String result = df.format(now.getTime());
         
-        
-        return totalcalsburned;     
+        return "Total calories burned: "+totalcalsburned +"on "+result;        
     }
-    
 }
