@@ -1,8 +1,15 @@
+import com.google.gson.annotations.SerializedName;
+
 public class Food {
+    @SerializedName("Energ_Kcal")
     private double calories; // in calories
+    @SerializedName("Lipid_Tot_(g)")
     private double fat; // in grams
+    @SerializedName("Protein_(g)")
     private double protein; // in grams
+    @SerializedName("Fiber_TD_(g)")
     private double fiber; // in grams
+    @SerializedName("Carbohydrt_(g)")
     private double carbs; // in grams
 
     // Constructor for food, implemented in Ingredient, Recipe, and Meal
