@@ -3,13 +3,14 @@ package Workout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Scanner;
 
 public class Workout {
 
     public enum Intensity {
         LOW, MEDIUM, HIGH
     };
-
+    private String workoutname;
     private Intensity intensity;
     private String dateString;
     private int caloriesBurned;
@@ -30,6 +31,10 @@ public class Workout {
         }
     }
 
+    public String workoutName(){
+        return workoutname;
+    }
+
     public Intensity getIntensity() {
         return intensity;
     }
@@ -46,5 +51,33 @@ public class Workout {
         this.dateString = dateString;
     }
 
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in); 
+    System.out.println("Enter Name of workout: ");
+        String enterworkoutname = scanner.nextLine();
+    System.out.println("Enter Workout Intensity: ");
+    System.out.println("1.Low");
+    System.out.println("2.Medium");
+    System.out.println("3.High");
+        int enterintensity = scanner.nextInt();
+    System.out.println("Please Enter Duration");
+        int enterduration=scanner.nextInt();
+    
+    switch(enterintensity){
+        case 1:
+        Workout workoutlow=new Workout(Intensity.LOW);
+        break;
+        
+        case 2:
+        Workout workoutmid=new Workout(Intensity.MEDIUM);
+        break;
 
+        case 3:
+        Workout workouthigh=new Workout(Intensity.HIGH);
+        break;
+        default:
+
+        break;
+    } 
+}
 }
