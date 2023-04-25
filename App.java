@@ -39,37 +39,6 @@ public class App {
         }
     }
 
-    public static void createWorkout(){
-            Scanner scanner = new Scanner(System.in); 
-            System.out.println("Enter Name of workout: ");
-                String enterworkoutname = scanner.nextLine();
-            System.out.println("Enter Workout Intensity: ");
-            System.out.println("1.Low");
-            System.out.println("2.Medium");
-            System.out.println("3.High");
-                int enterintensity = scanner.nextInt();
-            System.out.println("Please Enter Duration");
-                int enterduration=scanner.nextInt();
-            
-            switch(enterintensity){
-                case 1:
-                Workout workoutlow=new Workout(Intensity.LOW);
-                break;
-                
-                case 2:
-                Workout workoutmid=new Workout(Intensity.MEDIUM);
-                break;
-        
-                case 3:
-                Workout workouthigh=new Workout(Intensity.HIGH);
-                break;
-                default:
-                System.out.println("thats not an actual option, try again");
-                createWorkout();
-                break;
-            } 
-    }
-
     public static void printAllUsers() {
         try {
             ArrayList<User> usersList = jsonUtils.getAllUsers();
@@ -108,12 +77,44 @@ public class App {
         jsonUtils.removeUser(userToDelete);
     }
 
+    public static void createWorkout(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Name of workout: ");
+        String enterWorkoutName = scanner.nextLine();
+        System.out.println("Enter Workout Intensity: ");
+        System.out.println("1.Low");
+        System.out.println("2.Medium");
+        System.out.println("3.High");
+        int enterIntensity = scanner.nextInt();
+        System.out.println("Please Enter Duration");
+        int enterDuration=scanner.nextInt();
+
+        switch(enterIntensity){
+            case 1:
+                Workout workoutLow=new Workout(Intensity.LOW);
+                break;
+
+            case 2:
+                Workout workoutMid=new Workout(Intensity.MEDIUM);
+                break;
+
+            case 3:
+                Workout workoutHigh=new Workout(Intensity.HIGH);
+                break;
+            default:
+                System.out.println("Try again. That is not an option.");
+                createWorkout();
+                break;
+        }
+    }
+
     public static void selectMenu() throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to NUTRiAPP! Please selection an option below:\n");
         System.out.println("1. Create account");
         System.out.println("2. Select user");
-        System.out.println("3. Delete user\n");
+        System.out.println("3. Delete user");
+        System.out.println("4. Create Workout\n");
 
         String option = scanner.nextLine();
         if(option.contains("1")){
@@ -125,6 +126,9 @@ public class App {
         else if(option.contains("3")){
             deleteUser();
         }
+        else if(option.contains("4")){
+            createWorkout();
+        }
         else{
             System.out.println("Option does not exist. Please enter a different value.");
         }
@@ -135,6 +139,5 @@ public class App {
         // jsonUtils.test();
 
         selectMenu();
-
     }
 }
