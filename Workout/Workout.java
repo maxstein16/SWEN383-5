@@ -13,10 +13,13 @@ public class Workout {
     private String workoutname;
     private Intensity intensity;
     private String dateString;
+    private int duration;
     private int caloriesBurned;
 
-    public Workout(Intensity intensity) {
+    public Workout(Intensity intensity,int duration) {
         this.intensity = intensity;
+        this.duration=duration;
+        
         Calendar now = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("ddMMyyyyHHmm");
         this.dateString = df.format(now.getTime());
@@ -38,6 +41,7 @@ public class Workout {
     public Intensity getIntensity() {
         return intensity;
     }
+    
 
     public void setIntensity(Intensity intensity) {
         this.intensity = intensity;

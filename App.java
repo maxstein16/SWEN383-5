@@ -53,15 +53,16 @@ public class App {
             
             switch(enterintensity){
                 case 1:
-                Workout workoutlow=new Workout(Intensity.LOW);
+                Workout workoutLow=new Workout(Intensity.LOW,enterduration);
                 break;
                 
                 case 2:
-                Workout workoutmid=new Workout(Intensity.MEDIUM);
+                Workout workoutMid=new Workout(Intensity.MEDIUM,enterduration);
                 break;
         
                 case 3:
-                Workout workouthigh=new Workout(Intensity.HIGH);
+                Workout workoutHigh=new Workout(Intensity.HIGH,enterduration);
+
                 break;
                 default:
                 System.out.println("thats not an actual option, try again");
