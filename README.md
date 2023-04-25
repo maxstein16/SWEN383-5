@@ -12,7 +12,7 @@ The app will allow users to enter the following information:
 
 This information will be used to calculate the user's age.
 
-# Goals
+# Goals (DID NOT IMPLEMENT TIME CONSTRAINT)
 The user may choose from one of several different goals:
 
 • Maintain weight: sets a target number of calories so that the user maintains their current weight. <br />
