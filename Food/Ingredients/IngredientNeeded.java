@@ -1,7 +1,9 @@
 package Food.Ingredients;
 
+import com.google.gson.annotations.SerializedName;
+
 public class IngredientNeeded {
-    
+    @SerializedName("ingredient")
     private Ingredient ingredient;
     private double amount;
 
@@ -10,10 +12,6 @@ public class IngredientNeeded {
         this.amount = amount;
     }
 
-    @Override
-    public String toString() {
-        return ingredient.getName() + " " + amount;
-    }
 
     @Override
     public boolean equals(Object other) {

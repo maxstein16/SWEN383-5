@@ -7,6 +7,7 @@ import Util.JSONUtils;
 import org.json.simple.parser.ParseException;
 
 import Users.User;
+import Workout.Workout;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,9 +19,9 @@ import java.util.Scanner;
 
 public class App {
     static User currentUser;
-/*
-    public static void createUser() throws IOException {
-        try (Scanner scanner = new Scanner(System.in)) {
+    static ShoppingList shoppingList = new ShoppingList();
+
+    public static void createUser(Scanner scanner) throws IOException {
             System.out.println("Enter a username: ");
             String username = scanner.nextLine();
             System.out.println("Enter your name: ");
@@ -37,15 +38,18 @@ public class App {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
         selectMenu();
     }
 
     public static void printAllUsers() {
         try {
             ArrayList<User> usersList = jsonUtils.getAllUsers();
+            if(usersList.isEmpty()) {
+                System.out.println("No users found. Press enter to return to menu:");
+                Scanner scanner = new Scanner(System.in);
+                scanner.nextLine();
+                selectMenu();
+            }
             HashMap mapUserSelection = new HashMap();
             int x = 1;
             for (User user : usersList) {
@@ -80,10 +84,10 @@ public class App {
         String IngredientName = scanner.nextLine();
         System.out.println("Ingredient Amount:");
         Double IngredientAmount = Double.parseDouble(scanner.nextLine());
-
         IngredientNeeded ingredientNeeded = new IngredientNeeded(jsonUtils.getSingleIngredient(IngredientName), IngredientAmount);
-
-        ShoppingList shoppingList = new ShoppingList(ingredientNeeded);
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.addingredient(ingredientNeeded);
+        App.shoppingList = shoppingList;
     }
 
     public static void showMenu() throws IOException {
@@ -92,7 +96,8 @@ public class App {
         System.out.println("1. Go To Food Menu");
         System.out.println("2. Add to Shopping List");
         System.out.println("3. View the Shopping List");
-        System.out.println("4. Delete user\n");
+        System.out.println("4. Show History");
+        System.out.println("5. Add workout");
 
         String option = scanner.nextLine();
         if(option.contains("1")){
@@ -101,13 +106,31 @@ public class App {
         }
         else if(option.contains("2")){
             AddShoppingList();
+            showMenu();
         }
         else if(option.contains("3")){
-            ViewShoppingList();
+            if((!shoppingList.getShopList().isEmpty())) {
+                ArrayList<IngredientNeeded> shopList = shoppingList.getShopList();
+                for (IngredientNeeded ingredientNeeded : shopList) {
+                    System.out.println(ingredientNeeded.getIngredient().getName() + ":  " + ingredientNeeded.getAmount());
+                }
+            } else {
+                System.out.println("Shopping list empty. Press enter to continue:");
+                scanner.nextLine();
+            }
+            showMenu();
         }
-        else if(option.contains("3")){
-            ViewHistory();
-
+        else if(option.contains("4")){
+            for(Workout workout: jsonUtils.getAllWorkouts()) {
+                System.out.println(workout.getName() + ":  " + workout.getCalsBurned());
+            }
+            System.out.println("Pres enter to return to menu:");
+            scanner.nextLine();
+            showMenu();
+        }
+        else if(option.contains("5")){
+            createWorkout();
+            showMenu();
         }
 
 
@@ -122,12 +145,10 @@ public class App {
         System.out.println("0. Return to Menu");
         System.out.println("1. Add Meal");
         System.out.println("2. Show All Meals");
-        System.out.println("3. Get Single Meal");
-        System.out.println("4. Delete Meal");
-        System.out.println("5. Add Recipe");
-        System.out.println("6. Show All Recipes");
-        System.out.println("7. Get Single Recipe");
-        System.out.println("8. Delete Recipe");
+        System.out.println("3. Delete Meal");
+        System.out.println("4. Add Recipe");
+        System.out.println("5. Show All Recipes");
+        System.out.println("6. Delete Recipe");
         //System.out.println("9. Show All Ingredients");
         //System.out.println("10. Get Single Ingredient\n");
 
@@ -160,61 +181,62 @@ public class App {
             FoodMenu();
         }
         else if(option.contains("3")){
-            System.out.println("Enter a meal to get:");
-            String mealInput = scanner.nextLine();
-            Meal newMeal = jsonUtils.getSingleMeal(mealInput);
-            System.out.println(newMeal.toString());
-            FoodMenu();
-        }
-        else if(option.contains("4")){
             System.out.println("Enter a meal to delete:");
             String mealInput = scanner.nextLine();
             Meal newMeal = jsonUtils.getSingleMeal(mealInput);
-            jsonUtils.removeMeal(newMeal.getName());
+            jsonUtils.removeMeal(jsonUtils.getSingleMeal(mealInput));
             FoodMenu();
         }
-        else if(option.contains("5")){
+        else if(option.contains("4")){
             ArrayList<IngredientNeeded> ingredients = new ArrayList<>();
             ArrayList<String> steps = new ArrayList<>();
             System.out.println("Enter Recipe Name:");
             String recipeName = scanner.nextLine();
-            do{
+            while(true){
                 System.out.println("Enter Ingredient Name (EXACT):");
                 String ingredientName = scanner.nextLine();
                 System.out.println("Enter Ingredient Amount:");
                 double ingredientAmount = scanner.nextDouble();
-                Ingredient ingredientObject = jsonUtils.getIngredient(ingredientName, ingredientAmount);
+                Ingredient ingredientObject = jsonUtils.getSingleIngredient(ingredientName);
                 IngredientNeeded ingredientNeeded = new IngredientNeeded(ingredientObject, ingredientAmount);
                 ingredients.add(ingredientNeeded);
                 System.out.println("Type Stop to stop writing ingredients, otherwise press any button:");
-            }while(scanner.nextLine() != "stop");
+                scanner = new Scanner(System.in);
+                if(scanner.nextLine().equalsIgnoreCase("stop")){
+                    break;
+                }
+            }
 
-            do{
+            while(true) {
                 System.out.println("Enter Step Directions:");
                 String step = scanner.nextLine();
                 steps.add(step);
                 System.out.println("Type Stop to stop writing steps, otherwise press any button:");
-            }while(scanner.nextLine() != "stop");
+                scanner = new Scanner(System.in);
+                if(scanner.nextLine().equalsIgnoreCase("stop")){
+                    break;
+                }
+            }
 
             Recipe newRecipe = new Recipe(recipeName, ingredients, steps);
             jsonUtils.addRecipe(newRecipe);
             FoodMenu();
         }
-        else if(option.contains("6")){
+        else if(option.contains("5")){
             ArrayList<Recipe> newRecipe = jsonUtils.getAllRecipes();
-            for (Recipe recipe : newRecipe) {
-                System.out.println(recipe.toString());
+            if(newRecipe.isEmpty()) {
+                System.out.println("No Recipes. Press enter to return to menu:");
+                scanner.nextLine();
+            } else {
+                for (Recipe recipe : newRecipe) {
+                    System.out.println(recipe.toString());
+                }
+                System.out.println("Press enter to continue:");
+                String wait = scanner.nextLine();
             }
             FoodMenu();
         }
-        else if(option.contains("7")){
-            System.out.println("Enter a Recipe to get:");
-            String RecipeInput = scanner.nextLine();
-            Recipe newRecipe = jsonUtils.getSingleRecipe(RecipeInput);
-            System.out.println(newRecipe.toString());
-            FoodMenu();
-        }
-        else if(option.contains("8")){
+        else if(option.contains("6")){
             System.out.println("Enter Recipe to delete:");
             String RecipeInput = scanner.nextLine();
             Recipe gotRecipe = jsonUtils.getSingleRecipe(RecipeInput);
@@ -256,7 +278,7 @@ public class App {
         selectMenu();
     }
 
-    public static void createWorkout(){
+    public static void createWorkout() throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Name of workout: ");
         String enterworkoutname = scanner.nextLine();
@@ -270,16 +292,18 @@ public class App {
 
         switch(enterintensity){
             case 1:
-                Workout workoutLow=new Workout(Intensity.LOW,enterduration);
+                Workout workoutLow=new Workout(Workout.Intensity.LOW,enterworkoutname,enterduration);
+                jsonUtils.addWorkout(workoutLow);
                 break;
 
             case 2:
-                Workout workoutMid=new Workout(Intensity.MEDIUM,enterduration);
+                Workout workoutMid=new Workout(Workout.Intensity.MEDIUM,enterworkoutname,enterduration);
+                jsonUtils.addWorkout(workoutMid);
                 break;
 
             case 3:
-                Workout workoutHigh=new Workout(Intensity.HIGH,enterduration);
-
+                Workout workoutHigh=new Workout(Workout.Intensity.HIGH,enterworkoutname,enterduration);
+                jsonUtils.addWorkout(workoutHigh);
                 break;
             default:
                 System.out.println("thats not an actual option, try again");
@@ -297,7 +321,7 @@ public class App {
 
         String option = scanner.nextLine();
         if(option.contains("1")){
-            createUser();
+            createUser(scanner);
         }
         else if(option.contains("2")){
             printAllUsers();
@@ -309,12 +333,12 @@ public class App {
             System.out.println("Option does not exist. Please enter a different value.");
         }
     }
-*/
+
     private static JSONUtils jsonUtils = new JSONUtils();
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-         jsonUtils.test();
+        // jsonUtils.test();
 
-        //selectMenu();
+         selectMenu();
 
     }
 }

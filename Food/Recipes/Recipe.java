@@ -3,10 +3,14 @@ package Food.Recipes;
 import Food.Food;
 import Food.Ingredients.Ingredient;
 import Food.Ingredients.IngredientNeeded;
+import Users.User;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Recipe extends Food {
+    @SerializedName("ingredientsList")
     ArrayList<IngredientNeeded> ingredientsList;
     private ArrayList<String> stepsList;
     private String step;
@@ -146,5 +150,20 @@ public class Recipe extends Food {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Recipe)) {
+            return false;
+        }
+
+        Recipe otherRecipe = (Recipe) obj;
+
+        return Objects.equals(name, otherRecipe.getName());
     }
 }

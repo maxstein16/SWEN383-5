@@ -10,17 +10,20 @@ public class ShoppingList {
     private ArrayList<IngredientNeeded> shopList = new ArrayList<IngredientNeeded>();
     
 
-    ShoppingList(ArrayList<IngredientNeeded> inList) {
+    public ShoppingList(ArrayList<IngredientNeeded> inList) {
         //If you want to start the list with recipes
         for(IngredientNeeded ingredient : inList) {
             this.shopList.add(ingredient);
         }
     }
 
-    ShoppingList() {
+    public ShoppingList() {
         //If you want to start the list empty
     }
 
+    public ArrayList<IngredientNeeded> getShopList() {
+        return shopList;
+    }
     public void generateListRecipe(Recipe recipe){
             //adds all ingreidents to the shopping list
             for(IngredientNeeded ingredientNeeded : recipe.getIngredientsList()) {

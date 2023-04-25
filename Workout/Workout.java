@@ -12,21 +12,22 @@ public class Workout {
 
     private Intensity intensity;
     private String date;
-    private int calsBurned;
+    private double calsBurned;
     private int duration;
     private String name;
 
-    public Workout(Intensity intensity, String name, int duration) {
+    public Workout(Intensity intensity, String name, double duration) {
         this.intensity = intensity;
+        this.name = name;
         Calendar now = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("ddMMyyyyHHmm");
         this.date = df.format(now.getTime());
         if(intensity == Intensity.LOW){
-            calsBurned = 5;
+            calsBurned = 5 * duration;
         } else if(intensity == Intensity.MEDIUM){
-            calsBurned = 7;
+            calsBurned = 7.5 * duration;
         } else if(intensity == Intensity.HIGH){
-            calsBurned = 10;
+            calsBurned = 10 * duration;
         } else {
             calsBurned = 0;
         }
@@ -48,9 +49,9 @@ public class Workout {
         this.date = date;
     }
 
-    public void setCalsBurned(int calsBurned) { this.calsBurned = calsBurned; }
+    public void setCalsBurned(double calsBurned) { this.calsBurned = calsBurned; }
 
-    public int getCalsBurned() { return this.calsBurned; }
+    public double getCalsBurned() { return this.calsBurned; }
 
     public void setDuration(int duration) { this.duration = duration; }
 

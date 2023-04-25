@@ -44,7 +44,7 @@ public class JSONUtils {
         User getUser2 = getSingleUser("TestB");
         removeUser(getUser2);
         createIngredientsJSON();
-        Thread.sleep(1000);
+        Scanner fuck = new Scanner(System.in);
         ArrayList<IngredientNeeded> ingredientsList = new ArrayList<>();
         ArrayList<String> stepsList = new ArrayList<>();
         stepsList.add("Step1");
@@ -52,18 +52,22 @@ public class JSONUtils {
         ingredientsList.add(new IngredientNeeded(getSingleIngredient("APPLEBEE'S,CHILI"), 100));
         Recipe testRecipe = new Recipe("TestRecipe", 10, 10, 10, 10, 10,
                 ingredientsList, stepsList);
-        //Recipe recipe = new Recipe()
+        Workout workout = new Workout(Workout.Intensity.HIGH, "Running", 20);
+        addWorkout(workout);
+        System.out.println(getAllWorkouts().get(0).getCalsBurned());
+        /*
+        // Recipe recipe = new Recipe();
         addRecipe(testRecipe);
         ArrayList<Recipe> recipesTest = getAllRecipes();
         Meal mealTest = new Meal("TestMeal", recipesTest);
         addMeal(mealTest);
-        for(Recipe recipe : recipesTest) {
+        for (Recipe recipe : recipesTest) {
             System.out.println(recipe.getStepsList().toString());
         }
         ArrayList<Meal> mealsTest = getAllMeals();
-        for(Meal meal : mealsTest) {
+        for (Meal meal : mealsTest) {
             System.out.println(meal.getRecipeList().toString());
-        }
+        } */
         //testSearch();
     }
 
@@ -239,12 +243,24 @@ public class JSONUtils {
     private void writeRecipe(JsonWriter writer, Recipe recipe) throws IOException {
         writer.beginObject();
         writer.name("name").value(recipe.getName());
-        System.out.println(recipe.getIngredients());
         writer.name("ingredientsList");
         writer.beginArray();
-        for (IngredientNeeded ingredient : recipe.getIngredientsList()) {
+        for (IngredientNeeded ingredientNeeded : recipe.getIngredientsList()) {
+            Ingredient ingredient = ingredientNeeded.getIngredient();
             writer.beginObject();
-            writer.name("ingredient:").value(ingredient.getIngredient().getName());
+            writer.name("ingredientNeeded");
+            writer.beginObject();
+            writer.name("ingredient");
+            writer.beginObject();
+            writer.name("name").value(ingredient.getName());
+            writer.name("stock").value(ingredient.getStock());
+            writer.name("calories").value(ingredient.getCalories());
+            writer.name("carbs").value(ingredient.getCarbs());
+            writer.name("fat").value(ingredient.getFat());
+            writer.name("fiber").value(ingredient.getFiber());
+            writer.name("protein").value(ingredient.getProtein());
+            writer.endObject();
+            writer.endObject();
             writer.endObject();
         }
         writer.endArray();
@@ -330,7 +346,7 @@ public class JSONUtils {
 
     public Ingredient getSingleIngredient(String ingredientName) throws FileNotFoundException {
         ArrayList<Ingredient> allIngredients = parseAvailableIngredients();
-        for (Ingredient ingredient: allIngredients) {
+        for (Ingredient ingredient : allIngredients) {
             if (Objects.equals(ingredient.getName(), ingredientName)) {
                 return ingredient;
             }
