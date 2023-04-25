@@ -4,6 +4,7 @@ import Food.Ingredients.Ingredient;
 import Food.Ingredients.IngredientNeeded;
 import Food.Ingredients.Ingredients;
 import Food.Recipes.Recipe;
+import Food.Recipes.Recipes;
 import Users.User;
 import Users.Users;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -16,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import org.json.simple.parser.ParseException;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -42,9 +44,9 @@ public class JSONUtils {
         ArrayList<String> stepsList = new ArrayList<>();
         stepsList.add("Step1");
         ingredientsList.add(new IngredientNeeded(new Ingredient("Butter", 10,
-                10,10,10,10,10), 10));
+                10, 10, 10, 10, 10), 10));
         ingredientsList.add(new IngredientNeeded(new Ingredient("Apples", 10,
-                10,10,10,10,10), 10));
+                10, 10, 10, 10, 10), 10));
         Recipe testRecipe = new Recipe("TestRecipe", 10, 10, 10, 10, 10,
                 ingredientsList, stepsList);
         addRecipe(testRecipe);
@@ -88,7 +90,7 @@ public class JSONUtils {
             Users usersGson = gson.fromJson(jsonReader, Users.class);
             List<User> users = usersGson.getUsers();
             usersList.addAll(users);
-            }
+        }
         return usersList;
     }
 
@@ -122,8 +124,8 @@ public class JSONUtils {
         System.out.println("Enter an ingredient to search for:");
         String ingredient = scanner.nextLine();
         ArrayList<Ingredient> ingredients = parseAvailableIngredients();
-        for(Ingredient ingredient1 : ingredients) {
-            if(ingredient1.getName().toLowerCase().contains(ingredient.toLowerCase())) {
+        for (Ingredient ingredient1 : ingredients) {
+            if (ingredient1.getName().toLowerCase().contains(ingredient.toLowerCase())) {
                 System.out.println(ingredient1.getName());
             }
         }
@@ -171,7 +173,7 @@ public class JSONUtils {
         writer.close();
     }
 
-   /* public ArrayList<Recipe> getAllRecipes() throws FileNotFoundException {
+    public ArrayList<Recipe> getAllRecipes() throws FileNotFoundException {
         Gson gson = new Gson();
         ArrayList<Recipe> recipesList = new ArrayList<>();
         File checkFile = new File("Data/Recipes.json");
@@ -180,15 +182,21 @@ public class JSONUtils {
             Recipes recipesGson = gson.fromJson(jsonReader, Recipes.class);
             List<Recipe> recipes = recipesGson.getRecipes();
             recipesList.addAll(recipes);
-            }
-        return usersList;
-    }*/
+        }
+        return recipesList;
+    }
 
-    public Recipe getSingleRecipe(String recipeName) {
+    public Recipe getSingleRecipe(String recipeName) throws FileNotFoundException {
+        ArrayList<Recipe> allRecipes = getAllRecipes();
+        for (Recipe recipe : allRecipes) {
+            if (Objects.equals(recipe.getName(), recipeName)) {
+                return recipe;
+            }
+        }
         return null;
     }
 
-  /*  public void removeRecipe(Recipe recipe) throws IOException {
+    public void removeRecipe(Recipe recipe) throws IOException {
         ArrayList<Recipe> allRecipes = getAllRecipes();
         allRecipes.remove(recipe);
         JsonWriter writer = new JsonWriter(new FileWriter("Data/Recipes.json"));
@@ -197,21 +205,21 @@ public class JSONUtils {
             writeRecipe(writer, recipeInArr);
         }
         closeWriter(writer);
-    }*/
+    }
 
     public void addRecipe(Recipe recipe) throws IOException {
-      //  ArrayList<Recipe> allRecipes = getAllRecipes();
-     //   if (allRecipes.contains(recipe)) {
-     //       System.out.println("Recipe already exists.");
-      //  } else {
+        ArrayList<Recipe> allRecipes = getAllRecipes();
+        if (allRecipes.contains(recipe)) {
+            System.out.println("Recipe already exists.");
+        } else {
             JsonWriter writer = new JsonWriter(new FileWriter("Data/Recipes.json"));
             writeHeader("recipes", writer);
-      //      for (Recipe recipeInArr : allRecipes) {
-     //           writeRecipe(writer, recipeInArr);
-      //      }
+            for (Recipe recipeInArr : allRecipes) {
+                writeRecipe(writer, recipeInArr);
+            }
             writeRecipe(writer, recipe);
             closeWriter(writer);
-     //   }
+        }
     }
 
     private void writeRecipe(JsonWriter writer, Recipe recipe) throws IOException {
@@ -219,7 +227,7 @@ public class JSONUtils {
         writer.name("name").value(recipe.getName());
         writer.name("ingredients");
         writer.beginArray();
-        for(IngredientNeeded ingredient : recipe.getIngredients()) {
+        for (IngredientNeeded ingredient : recipe.getIngredients()) {
             writer.beginObject();
             writer.name("ingredient:").value(ingredient.getIngredient().toString());
             writer.endObject();
@@ -227,7 +235,7 @@ public class JSONUtils {
         writer.endArray();
         writer.name("steps");
         writer.beginArray();
-        for(String step : recipe.getStepsList()) {
+        for (String step : recipe.getStepsList()) {
             writer.beginObject();
             writer.name("step").value(step);
             writer.endObject();
