@@ -38,13 +38,13 @@ Ingredients are the most basic food type. In addition to the basic properties ab
 
 The app will maintain a searchable database of ingredients. The stock of any ingredient is 0 unless the user indicates that they have purchased some amount of the ingredient.
 
-Recipes are also a type of food. The user may create a new recipe by specifying:
+(Sometimes works, still bugs) Recipes are also a type of food. The user may create a new recipe by specifying:
 
 • A unique name for the new recipe. <br />
 • The ingredients (and amount of each) required to make the recipe. <br />
 • The preparation instructions for the recipe. <br />
 
-Meals are also a type of food. The user may create a meal by specifying:
+(Does not work) Meals are also a type of food. The user may create a meal by specifying:
 
 • A unique name for the meal. <br />
 • The recipes included in the meal, e.g., salad, soup, entree, dessert, etc. <br />
