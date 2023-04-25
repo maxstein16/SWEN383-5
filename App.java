@@ -2,11 +2,13 @@ import Food.Ingredients.Ingredient;
 import Food.Ingredients.IngredientNeeded;
 import Food.Meals.Meal;
 import Food.Recipes.Recipe;
+import Food.ShoppingList;
 import Util.JSONUtils;
 import org.json.simple.parser.ParseException;
 
 import Users.User;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -72,12 +74,25 @@ public class App {
         }
     }
 
-    public static void showMenu(){
+    public static void AddShoppingList() throws FileNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingredient Name:");
+        String IngredientName = scanner.nextLine();
+        System.out.println("Ingredient Amount:");
+        Double IngredientAmount = Double.parseDouble(scanner.nextLine());
+
+        IngredientNeeded ingredientNeeded = new IngredientNeeded(jsonUtils.getSingleIngredient(IngredientName), IngredientAmount);
+
+        ShoppingList shoppingList = new ShoppingList(ingredientNeeded);
+    }
+
+    public static void showMenu() throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to NUTRiAPP! Please selection an option below:\n");
         System.out.println("1. Go To Food Menu");
-        System.out.println("2. ViewShoppingList");
-        System.out.println("3. Delete user\n");
+        System.out.println("2. Add to Shopping List");
+        System.out.println("3. View the Shopping List");
+        System.out.println("4. Delete user\n");
 
         String option = scanner.nextLine();
         if(option.contains("1")){
@@ -85,6 +100,9 @@ public class App {
 
         }
         else if(option.contains("2")){
+            AddShoppingList();
+        }
+        else if(option.contains("3")){
             ViewShoppingList();
         }
         else if(option.contains("3")){
@@ -135,7 +153,7 @@ public class App {
             FoodMenu();
         }
         else if(option.contains("2")){
-            Meal[] newMeal = jsonUtils.getAllMeals();
+            Meal[] newMeal = jsonUtils.getAllMeals().toArray(new Meal[0]);
             for (Meal meal : newMeal) {
                 System.out.println(meal.toString());
             }
