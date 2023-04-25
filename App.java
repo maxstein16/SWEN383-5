@@ -98,6 +98,7 @@ public class App {
         System.out.println("3. View the Shopping List");
         System.out.println("4. Show History");
         System.out.println("5. Add workout");
+        System.out.println("6. Exit");
 
         String option = scanner.nextLine();
         if(option.contains("1")){
@@ -124,7 +125,7 @@ public class App {
             for(Workout workout: jsonUtils.getAllWorkouts()) {
                 System.out.println(workout.getName() + ":  " + workout.getCalsBurned());
             }
-            System.out.println("Pres enter to return to menu:");
+            System.out.println("Press enter to return to menu:");
             scanner.nextLine();
             showMenu();
         }
@@ -132,8 +133,10 @@ public class App {
             createWorkout();
             showMenu();
         }
-
-
+        else if(option.contains("6")){
+            System.out.println("Goodbye!");
+            System.exit(0);
+        }
         else{
             System.out.println("Option does not exist. Please enter a different value.");
         }
@@ -149,8 +152,7 @@ public class App {
         System.out.println("4. Add Recipe");
         System.out.println("5. Show All Recipes");
         System.out.println("6. Delete Recipe");
-        //System.out.println("9. Show All Ingredients");
-        //System.out.println("10. Get Single Ingredient\n");
+        System.out.println("7. Exit");
 
         String option = scanner.nextLine();
         if(option.contains("0")){
@@ -243,26 +245,10 @@ public class App {
             jsonUtils.removeRecipe(gotRecipe);
             FoodMenu();
         }
-//        else if(option.contains("9")){
-//            System.out.println("Enter Ingredient Name:");
-//            String IngredientName = scanner.nextLine();
-//            System.out.println("Enter Ingredient calories:");
-//            double IngredientCalories = scanner.nextDouble();
-//            System.out.println("Enter Ingredient Fat:");
-//            double IngredientFat = scanner.nextDouble();
-//            System.out.println("Enter Ingredient Protein:");
-//            double IngredientProtein = scanner.nextDouble();
-//            System.out.println("Enter Ingredient Fiber:");
-//            double IngredientFiber = scanner.nextDouble();
-//            System.out.println("Enter Ingredient Carbs:");
-//            double IngredientCarbs = scanner.nextDouble();
-//            System.out.println("Enter Ingredient Stock:");
-//            double IngredientStock = scanner.nextDouble();
-//
-//            Ingredient newIngredient = new Ingredient(IngredientName, IngredientCalories, IngredientFat, IngredientProtein, IngredientFiber, IngredientCarbs, IngredientStock );
-//            jsonUtils.addIngredient(newIngredient);
-//            FoodMenu();
-//        }
+        else if(option.contains("7")){
+            System.out.println("Goodbye!");
+            System.exit(0);
+        }
         else{
             System.out.println("Option does not exist. Please enter a different value.");
             FoodMenu();
@@ -317,7 +303,8 @@ public class App {
         System.out.println("Welcome to NUTRiAPP! Please selection an option below:\n");
         System.out.println("1. Create account");
         System.out.println("2. Select user");
-        System.out.println("3. Delete user\n");
+        System.out.println("3. Delete user");
+        System.out.println("4. Exit\n");
 
         String option = scanner.nextLine();
         if(option.contains("1")){
@@ -328,6 +315,10 @@ public class App {
         }
         else if(option.contains("3")){
             deleteUser();
+        }
+        else if(option.contains("4")){
+            System.out.println("Goodbye!");
+            System.exit(0);
         }
         else{
             System.out.println("Option does not exist. Please enter a different value.");
