@@ -105,7 +105,7 @@ public class JSONUtils {
     public void addUser(User user) throws IOException {
         ArrayList<User> currentUsers = getAllUsers();
         if (currentUsers.contains(user)) {
-            System.out.println("Users.Users.User already exists.");
+            System.out.println("User already exists.");
         } else {
             JsonWriter writer = new JsonWriter(new FileWriter("Data/Users.json"));
             writeHeader("users", writer);
