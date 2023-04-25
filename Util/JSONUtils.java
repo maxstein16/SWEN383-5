@@ -3,6 +3,7 @@ package Util;
 import Food.Ingredients.Ingredient;
 import Food.Ingredients.IngredientNeeded;
 import Food.Ingredients.Ingredients;
+import Food.Meals.Meal;
 import Food.Recipes.Recipe;
 import Food.Recipes.Recipes;
 import Users.User;
@@ -248,9 +249,10 @@ public class JSONUtils {
         writer.name("carbs").value(recipe.getCarbs());
         writer.endObject();
     }
-/*
+
     public Meal[] getAllMeals() {
 
+        return new Meal[0];
     }
 
     public Meal getSingleMeal(String mealName) {
@@ -279,7 +281,7 @@ public class JSONUtils {
 
     public void addActivity() {
 
-    } */
+    }
 
 
 }
