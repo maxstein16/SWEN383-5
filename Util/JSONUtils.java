@@ -3,10 +3,15 @@ package Util;
 import Food.Ingredients.Ingredient;
 import Food.Ingredients.IngredientNeeded;
 import Food.Ingredients.Ingredients;
+import Food.Meals.Meal;
+import Food.Meals.Meals;
 import Food.Recipes.Recipe;
 import Food.Recipes.Recipes;
+import History.History;
+import Workout.Workouts;
 import Users.User;
 import Users.Users;
+import Workout.Workout;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
@@ -248,38 +254,140 @@ public class JSONUtils {
         writer.name("carbs").value(recipe.getCarbs());
         writer.endObject();
     }
-/*
-    public Meal[] getAllMeals() {
 
+    public ArrayList<Meal> getAllMeals() throws FileNotFoundException {
+        Gson gson = new Gson();
+        ArrayList<Meal> mealsList = new ArrayList<>();
+        File checkFile = new File("Data/Meals.json");
+        if (checkFile.exists() && checkFile.length() != 0) {
+            JsonReader jsonReader = new JsonReader(new FileReader("Data/Meals.json"));
+            Meals mealsGson = gson.fromJson(jsonReader, Meals.class);
+            List<Meal> meals = mealsGson.getMeals();
+            mealsList.addAll(meals);
+        }
+        return mealsList;
     }
 
-    public Meal getSingleMeal(String mealName) {
-
+    public Meal getSingleMeal(String mealName) throws FileNotFoundException {
+        ArrayList<Meal> allMeals = getAllMeals();
+        for (Meal meal : allMeals) {
+            if (Objects.equals(meal.getName(), mealName)) {
+                return meal;
+            }
+        }
+        return null;
     }
 
-    public void removeMeal(String mealName) {
-
+    public void removeMeal(Meal meal) throws IOException {
+        ArrayList<Meal> allMeals = getAllMeals();
+        allMeals.remove(meal);
+        JsonWriter writer = new JsonWriter(new FileWriter("Data/Meals.json"));
+        writeHeader("meals", writer);
+        for (Meal mealInArr : allMeals) {
+            writeMeal(writer, mealInArr);
+        }
+        closeWriter(writer);
     }
 
-    public Workout[] getAllWorkouts() {
-
+    public void addMeal(Meal meal) throws IOException {
+        ArrayList<Meal> allMeals = getAllMeals();
+        if (allMeals.contains(meal)) {
+            System.out.println("Meal already exists.");
+        } else {
+            JsonWriter writer = new JsonWriter(new FileWriter("Data/Meals.json"));
+            writeHeader("meals", writer);
+            for (Meal mealInArr : allMeals) {
+                writeMeal(writer, mealInArr);
+            }
+            writeMeal(writer, meal);
+            closeWriter(writer);
+        }
     }
 
-    public Workout getSingleWorkout(int workoutId) {
-
+    private void writeMeal(JsonWriter writer, Meal meal) throws IOException {
+        writer.beginObject();
+        writer.name("name").value(meal.getName());
+        writer.name("recipes");
+        writer.beginArray();
+        for (Recipe recipe : meal.getRecipeList()) {
+            writeRecipe(writer, recipe);
+        }
+        writer.endArray();
+        writer.name("calories").value(meal.getCalories());
+        writer.name("fat").value(meal.getFat());
+        writer.name("protein").value(meal.getProtein());
+        writer.name("fiber").value(meal.getFiber());
+        writer.name("carbs").value(meal.getCarbs());
+        writer.endObject();
     }
 
-    public void removeWorkout(int workoutId) {
-
+    public Ingredient getSingleIngredient(String ingredientName) throws FileNotFoundException {
+        ArrayList<Ingredient> allIngredients = parseAvailableIngredients();
+        for (Ingredient ingredient: allIngredients) {
+            if (Objects.equals(ingredient.getName(), ingredientName)) {
+                return ingredient;
+            }
+        }
+        return null;
     }
 
-    public List<History> getHistory() {
-
+    private void writeWorkout(JsonWriter writer, Workout workout) throws IOException {
+        writer.beginObject();
+        writer.name("name").value(workout.getName());
+        writer.name("intensity").value(workout.getIntensity().name());
+        writer.name("duration").value(workout.getDuration());
+        writer.name("date").value(workout.getDate());
+        writer.name("calsBurned").value(workout.getCalsBurned());
+        writer.endObject();
     }
 
-    public void addActivity() {
+    public ArrayList<Workout> getAllWorkouts() throws FileNotFoundException {
+        Gson gson = new Gson();
+        ArrayList<Workout> workoutsList = new ArrayList<>();
+        File checkFile = new File("Data/Workouts.json");
+        if (checkFile.exists() && checkFile.length() != 0) {
+            JsonReader jsonReader = new JsonReader(new FileReader("Data/Workouts.json"));
+            Workouts workoutsGson = gson.fromJson(jsonReader, Workouts.class);
+            List<Workout> workouts = workoutsGson.getWorkouts();
+            workoutsList.addAll(workouts);
+        }
+        return workoutsList;
+    }
 
-    } */
+    public Workout getSingleWorkout(String workoutName) throws FileNotFoundException {
+        ArrayList<Workout> allWorkouts = getAllWorkouts();
+        for (Workout workout : allWorkouts) {
+            if (Objects.equals(workout.getName(), workoutName)) {
+                return workout;
+            }
+        }
+        return null;
+    }
 
+    public void removeWorkout(Workout workout) throws IOException {
+        ArrayList<Workout> allWorkouts = getAllWorkouts();
+        allWorkouts.remove(workout);
+        JsonWriter writer = new JsonWriter(new FileWriter("Data/Workouts.json"));
+        writeHeader("workouts", writer);
+        for (Workout workoutInArr : allWorkouts) {
+            writeWorkout(writer, workoutInArr);
+        }
+        closeWriter(writer);
+    }
+
+    public void addWorkout(Workout workout) throws IOException {
+        ArrayList<Workout> allWorkouts = getAllWorkouts();
+        if (allWorkouts.contains(workout)) {
+            System.out.println("Workout already exists.");
+        } else {
+            JsonWriter writer = new JsonWriter(new FileWriter("Data/Workouts.json"));
+            writeHeader("workouts", writer);
+            for (Workout workoutInArr : allWorkouts) {
+                writeWorkout(writer, workoutInArr);
+            }
+            writeWorkout(writer, workout);
+            closeWriter(writer);
+        }
+    }
 
 }
