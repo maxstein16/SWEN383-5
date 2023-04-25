@@ -1,4 +1,7 @@
 import Util.JSONUtils;
+import Workout.Workout;
+import Workout.Workout.Intensity;
+
 import org.json.simple.parser.ParseException;
 
 import Users.User;
@@ -12,7 +15,7 @@ import java.util.Scanner;
 
 public class App {
     static User currentUser;
-
+    
     public static void createUser(){
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Enter a username: ");
@@ -34,6 +37,37 @@ public class App {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void createWorkout(){
+            Scanner scanner = new Scanner(System.in); 
+            System.out.println("Enter Name of workout: ");
+                String enterworkoutname = scanner.nextLine();
+            System.out.println("Enter Workout Intensity: ");
+            System.out.println("1.Low");
+            System.out.println("2.Medium");
+            System.out.println("3.High");
+                int enterintensity = scanner.nextInt();
+            System.out.println("Please Enter Duration");
+                int enterduration=scanner.nextInt();
+            
+            switch(enterintensity){
+                case 1:
+                Workout workoutlow=new Workout(Intensity.LOW);
+                break;
+                
+                case 2:
+                Workout workoutmid=new Workout(Intensity.MEDIUM);
+                break;
+        
+                case 3:
+                Workout workouthigh=new Workout(Intensity.HIGH);
+                break;
+                default:
+                System.out.println("thats not an actual option, try again");
+                createWorkout();
+                break;
+            } 
     }
 
     public static void printAllUsers() {

@@ -3,13 +3,14 @@ package Workout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Scanner;
 
 public class Workout {
 
     public enum Intensity {
         LOW, MEDIUM, HIGH
     };
-
+    private String workoutname;
     private Intensity intensity;
     private String dateString;
     private int caloriesBurned;
@@ -28,6 +29,10 @@ public class Workout {
         } else {
             caloriesBurned = 0;
         }
+    }
+
+    public String workoutName(){
+        return workoutname;
     }
 
     public Intensity getIntensity() {
