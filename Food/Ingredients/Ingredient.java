@@ -1,10 +1,13 @@
+package Food.Ingredients;
+
+import Food.Food;
 import com.google.gson.annotations.SerializedName;
 
 public class Ingredient extends Food {
     private double stock;
     @SerializedName("Shrt_Desc")
     private String name;
-    
+
     // Constructor for ingredients
     public Ingredient(String name, double calories, double fat, double protein, double fiber, double carbs, double stock){
         super(calories, fat, protein, fiber, carbs);

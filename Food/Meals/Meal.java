@@ -1,7 +1,11 @@
+package Food.Meals;
+
+import Food.Food;
+import Food.Recipes.Recipe;
 
 import java.util.ArrayList;
 
-public class Meal extends Food{
+public class Meal extends Food {
     private ArrayList<Recipe> recipeList;
     private String name;
 
