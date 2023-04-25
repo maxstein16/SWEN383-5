@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class App {
     static User currentUser;
-
+/*
     public static void createUser() throws IOException {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Enter a username: ");
@@ -291,12 +291,12 @@ public class App {
             System.out.println("Option does not exist. Please enter a different value.");
         }
     }
-
+*/
     private static JSONUtils jsonUtils = new JSONUtils();
-    public static void main(String[] args) throws IOException, ParseException {
-        // jsonUtils.test();
+    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
+         jsonUtils.test();
 
-        selectMenu();
+        //selectMenu();
 
     }
 }

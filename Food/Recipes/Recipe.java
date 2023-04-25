@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Recipe extends Food {
     ArrayList<IngredientNeeded> ingredientsList;
     private ArrayList<String> stepsList;
+    private String step;
     private String name;
 
     // Constructor for recipes with manually set nutriton, implemented in Meal
@@ -55,7 +56,7 @@ public class Recipe extends Food {
     public String toString() {
         return "Recipe: " + this.name + " has " + getIngredients().size() + " ingredients and " + getStepsList().size() + " steps, totaling " + getCalories() + " calories " + getFat() + " fat " + getProtein() + " protein " + getFiber() + " fiber " + getCarbs() + " carbs ";
     }
-    
+
     //Food.Ingredients.Ingredients List
     public ArrayList<IngredientNeeded> getIngredients() {
         return this.ingredientsList;

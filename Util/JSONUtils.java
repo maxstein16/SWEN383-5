@@ -7,11 +7,10 @@ import Food.Meals.Meal;
 import Food.Meals.Meals;
 import Food.Recipes.Recipe;
 import Food.Recipes.Recipes;
-import History.History;
-import Workout.Workouts;
 import Users.User;
 import Users.Users;
 import Workout.Workout;
+import Workout.Workouts;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -21,7 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
@@ -37,7 +35,7 @@ public class JSONUtils {
 
     }
 
-    public void test() throws IOException, ParseException {
+    public void test() throws IOException, ParseException, InterruptedException {
         LocalDate date = LocalDate.of(1998, 7, 10);
         User testUser = new User("TestA", "Josh S", 100, 200, date);
         addUser(testUser);
@@ -46,17 +44,27 @@ public class JSONUtils {
         User getUser2 = getSingleUser("TestB");
         removeUser(getUser2);
         createIngredientsJSON();
+        Thread.sleep(1000);
         ArrayList<IngredientNeeded> ingredientsList = new ArrayList<>();
         ArrayList<String> stepsList = new ArrayList<>();
         stepsList.add("Step1");
-        ingredientsList.add(new IngredientNeeded(new Ingredient("Butter", 10,
-                10, 10, 10, 10, 10), 10));
-        ingredientsList.add(new IngredientNeeded(new Ingredient("Apples", 10,
-                10, 10, 10, 10, 10), 10));
+        stepsList.add("Step2");
+        ingredientsList.add(new IngredientNeeded(getSingleIngredient("APPLEBEE'S,CHILI"), 100));
         Recipe testRecipe = new Recipe("TestRecipe", 10, 10, 10, 10, 10,
                 ingredientsList, stepsList);
+        //Recipe recipe = new Recipe()
         addRecipe(testRecipe);
-        testSearch();
+        ArrayList<Recipe> recipesTest = getAllRecipes();
+        Meal mealTest = new Meal("TestMeal", recipesTest);
+        addMeal(mealTest);
+        for(Recipe recipe : recipesTest) {
+            System.out.println(recipe.getStepsList().toString());
+        }
+        ArrayList<Meal> mealsTest = getAllMeals();
+        for(Meal meal : mealsTest) {
+            System.out.println(meal.getRecipeList().toString());
+        }
+        //testSearch();
     }
 
     public ArrayList<Ingredient> parseAvailableIngredients() throws FileNotFoundException {
@@ -231,20 +239,19 @@ public class JSONUtils {
     private void writeRecipe(JsonWriter writer, Recipe recipe) throws IOException {
         writer.beginObject();
         writer.name("name").value(recipe.getName());
-        writer.name("ingredients");
+        System.out.println(recipe.getIngredients());
+        writer.name("ingredientsList");
         writer.beginArray();
-        for (IngredientNeeded ingredient : recipe.getIngredients()) {
+        for (IngredientNeeded ingredient : recipe.getIngredientsList()) {
             writer.beginObject();
-            writer.name("ingredient:").value(ingredient.getIngredient().toString());
+            writer.name("ingredient:").value(ingredient.getIngredient().getName());
             writer.endObject();
         }
         writer.endArray();
-        writer.name("steps");
+        writer.name("stepsList");
         writer.beginArray();
         for (String step : recipe.getStepsList()) {
-            writer.beginObject();
-            writer.name("step").value(step);
-            writer.endObject();
+            writer.value(step);
         }
         writer.endArray();
         writer.name("calories").value(recipe.getCalories());

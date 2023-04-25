@@ -11,22 +11,24 @@ public class Workout {
     };
 
     private Intensity intensity;
-    private String dateString;
-    private int caloriesBurned;
+    private String date;
+    private int calsBurned;
+    private int duration;
+    private String name;
 
-    public Workout(Intensity intensity) {
+    public Workout(Intensity intensity, String name, int duration) {
         this.intensity = intensity;
         Calendar now = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("ddMMyyyyHHmm");
-        this.dateString = df.format(now.getTime());
+        this.date = df.format(now.getTime());
         if(intensity == Intensity.LOW){
-            caloriesBurned = 5;
+            calsBurned = 5;
         } else if(intensity == Intensity.MEDIUM){
-            caloriesBurned = 7;
+            calsBurned = 7;
         } else if(intensity == Intensity.HIGH){
-            caloriesBurned = 10;
+            calsBurned = 10;
         } else {
-            caloriesBurned = 0;
+            calsBurned = 0;
         }
     }
 
@@ -39,12 +41,22 @@ public class Workout {
     }
 
     public String getDate(){
-        return dateString;
+        return date;
     }
 
-    public void setDate(String dateString) {
-        this.dateString = dateString;
+    public void setDate(String date) {
+        this.date = date;
     }
 
+    public void setCalsBurned(int calsBurned) { this.calsBurned = calsBurned; }
 
+    public int getCalsBurned() { return this.calsBurned; }
+
+    public void setDuration(int duration) { this.duration = duration; }
+
+    public int getDuration() { return this.duration; }
+
+    public void setName(String name) { this.name = name; }
+
+    public String getName() { return this.name; }
 }
